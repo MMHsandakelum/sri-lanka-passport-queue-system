@@ -1,9 +1,19 @@
 import json
 import boto3
+from decimal import Decimal
 
 dynamodb = boto3.resource('dynamodb')
 appointments_table = dynamodb.Table('appointments')
 queue_table = dynamodb.Table('queue_status')
+
+def convert_decimal(obj):
+    if isinstance(obj, Decimal):
+        return float(obj) if obj % 1 else int(obj)
+    if isinstance(obj, list):
+        return [convert_decimal(i) for i in obj]
+    if isinstance(obj, dict):
+        return {k: convert_decimal(v) for k, v in obj.items()}
+    return obj
 
 def lambda_handler(event, context):
     try:
@@ -37,13 +47,17 @@ def lambda_handler(event, context):
         qres = queue_table.get_item(Key={"location_id": location_id})
         current_token = qres.get("Item", {}).get("current_token", 0)
 
+        result = {
+            "current_token": current_token,
+            "waiting_count": len(waiting),
+            "waiting_list": [
+                {"token": appt["token"], "time": appt["time"]} for appt in waiting
+            ]
+        }
+
         return {
             "statusCode": 200,
-            "body": json.dumps({
-                "current_token": current_token,
-                "waiting_count": len(waiting),
-                "waiting_list": [{"token": appt["token"], "time": appt["time"]} for appt in waiting]
-            })
+            "body": json.dumps(convert_decimal(result))
         }
 
     except Exception as e:
