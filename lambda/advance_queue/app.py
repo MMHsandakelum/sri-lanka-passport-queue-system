@@ -4,6 +4,7 @@ from boto3.dynamodb.conditions import Key
 from decimal import Decimal
 
 dynamodb = boto3.resource('dynamodb')
+lambda_client = boto3.client('lambda')
 appointments_table = dynamodb.Table('appointments')
 queue_table = dynamodb.Table('queue_status')
 
@@ -58,6 +59,17 @@ def lambda_handler(event, context):
             Key={'location_id': location_id},
             UpdateExpression="SET current_token = :val",
             ExpressionAttributeValues={":val": next_token}
+        )
+
+        lambda_client.invoke(
+            FunctionName='notify_user',
+            InvocationType='Event',
+            Payload=json.dumps({
+                "body": json.dumps({
+                    "location_id": location_id,
+                    "date": date
+                })
+            })
         )
 
         return {
