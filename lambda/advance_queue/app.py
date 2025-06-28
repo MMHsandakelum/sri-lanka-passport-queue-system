@@ -26,8 +26,11 @@ def lambda_handler(event, context):
 
         # Find the matching appointment and update status
         response = appointments_table.scan(
-            FilterExpression="location_id = :loc AND #d = :date AND token = :tok",
-            ExpressionAttributeNames={"#d": "date"},
+            FilterExpression="location_id = :loc AND #d = :date AND #t = :tok",
+            ExpressionAttributeNames={
+                "#d": "date",
+                "#t": "token"
+            },
             ExpressionAttributeValues={
                 ":loc": location_id,
                 ":date": date,
