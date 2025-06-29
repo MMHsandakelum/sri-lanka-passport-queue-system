@@ -16,6 +16,7 @@ The system consists of four AWS Lambda functions that handle different aspects o
 - AWS Lambda for serverless compute
 - Amazon DynamoDB for data storage
 - Amazon SES for email notifications
+- Amazon API Gateway – Exposes public HTTP endpoints to trigger Lambda functions
 
 ## API Endpoints
 
