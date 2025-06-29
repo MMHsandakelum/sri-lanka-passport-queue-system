@@ -1,0 +1,79 @@
+{
+	"info": {
+		"_postman_id": "84568123-12fa-463a-ba8d-8dbf60883f9d",
+		"name": "sri-lanka-passport-queue-system",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "46276560"
+	},
+	"item": [
+		{
+			"name": "Book an appointment",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nic\": \"199705503053\",\r\n  \"name\": \"Harsha Sandakelum\",\r\n  \"email\": \"mmharshasandakelum@gmail.com\",\r\n  \"location_id\": \"kandy\",\r\n  \"date\": \"2025-06-29\",\r\n  \"time\": \"10:00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://tjcr75txoa.execute-api.ap-south-1.amazonaws.com/prod/book_appointment"
+			},
+			"response": []
+		},
+		{
+			"name": "Get queue status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://tjcr75txoa.execute-api.ap-south-1.amazonaws.com/prod/queue-status?location_id=kandy&date=2025-06-29",
+					"protocol": "https",
+					"host": [
+						"tjcr75txoa",
+						"execute-api",
+						"ap-south-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"prod",
+						"queue-status"
+					],
+					"query": [
+						{
+							"key": "location_id",
+							"value": "kandy"
+						},
+						{
+							"key": "date",
+							"value": "2025-06-29"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin calls queue",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"location_id\": \"colombo\",\r\n    \"date\": \"2025-06-29\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://tjcr75txoa.execute-api.ap-south-1.amazonaws.com/prod/advance"
+			},
+			"response": []
+		}
+	]
+}
